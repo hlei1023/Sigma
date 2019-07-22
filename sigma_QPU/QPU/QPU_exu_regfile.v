@@ -18,7 +18,7 @@ module QPU_exu_regfile(
   input  [`QPU_RFIDX_REAL_WIDTH-1:0] read_src2_idx,
   output [`QPU_XLEN-1:0] read_src1_data,                  //对于两比特GATE，输出的是执行GATE的掩码信息，同单比特门
   output [`QPU_XLEN-1:0] read_src2_data,
-  input dec_tqg,                                         //two-qubit gate
+  //input dec_tqg,                                         //two-qubit gate
   //output [`QPU_TWO_QUBIT_GATE_LIST_WIDTH - 1 : 0] read_tqgl1_data,
   //output [`QPU_TWO_QUBIT_GATE_LIST_WIDTH - 1 : 0] read_tqgl2_data,
 

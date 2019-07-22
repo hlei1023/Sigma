@@ -134,6 +134,11 @@ module tb_exu_alu();
   wire [`QPU_XLEN-1:0] alu_cwbck_o_data;
   wire [`QPU_RFIDX_REAL_WIDTH-1:0] alu_cwbck_o_rdidx;
 
+  wire alu_qcwbck_o_valid; // Handshake valid
+  reg  alu_qcwbck_o_ready; // Handshake ready
+  wire [`QPU_XLEN-1:0] alu_qcwbck_o_data;
+  wire [`QPU_RFIDX_REAL_WIDTH-1:0] alu_qcwbck_o_rdidx;
+
   wire alu_twbck_o_valid;
   reg  alu_twbck_o_ready;
   wire [`QPU_TIME_WIDTH - 1 : 0] alu_twbck_o_data;
@@ -190,7 +195,25 @@ module tb_exu_alu();
     #2 i_instr = `instr_QI;
     #2 i_instr = `instr_measure;
 
-    #5 i_instr = `instr_WFI;
+    #2 i_instr = `SMIS_S6_010100;                         //1
+    #2 i_instr = `SMIS_S7_101000;                         //2
+    #2 i_instr = `SMIS_S8_100100;                         //3  
+    #2 i_instr = `SMIS_S9_001100;                         //4
+    #2 i_instr = `T0_H_S6_X90_S7;                         //5    
+    #2 i_instr = `T1_CNOTS_S2_CNOTT_S3;                   //6
+    #2 i_instr = `T2_Y90_S8;                              //7  
+    #2 i_instr = `T1_MEASURE_S9;                          //8
+    #2 i_instr = `QWAIT_30;                               //9    
+    #2 i_instr = `ADDI_R1_R0_001100;                      //10
+    #2 i_instr = `FMR_R2_S9;                              //11
+    #2 i_instr = `BEQ_R1_R2_CASE2;                        //12  
+    #2 i_instr = `T0_X90_S2;                              //13
+    #2 i_instr = `QWAIT_1;                                //14
+    #2 i_instr = `BEQ_R0_R0_NEXT;                         //15  
+    #2 i_instr = `T0_H_S2;                                //16    
+    #2 i_instr = `QWAIT_1;                                //17
+    #2 i_instr = `T0_MEASURE_S2;                          //18  
+    #2 i_instr = `QWAIT_30;                               //19
   end
 ////////////////////////////////////////////////////////////////////
 
@@ -229,7 +252,7 @@ begin
     lsu_icb_cmd_ready = 1'b1;
     lsu_icb_rsp_valid = 1'b1;
     lsu_icb_rsp_rdata = `QPU_XLEN'b0;
-
+    alu_qcwbck_o_ready = 1'b1;
 end
 ///////////////////////////////////////////////////
 
@@ -374,6 +397,11 @@ end
     .cwbck_o_ready        (alu_cwbck_o_ready ),
     .cwbck_o_data         (alu_cwbck_o_data  ),
     .cwbck_o_rdidx        (alu_cwbck_o_rdidx ),
+
+    .qcwbck_o_valid       (alu_qcwbck_o_valid ), 
+    .qcwbck_o_ready       (alu_qcwbck_o_ready ),
+    .qcwbck_o_data        (alu_qcwbck_o_data  ),
+    .qcwbck_o_rdidx       (alu_qcwbck_o_rdidx ),
   
     .twbck_o_valid        (alu_twbck_o_valid ), 
     .twbck_o_ready        (alu_twbck_o_ready ),

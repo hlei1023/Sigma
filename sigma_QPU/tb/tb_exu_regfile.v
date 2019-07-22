@@ -119,6 +119,11 @@ module tb_exu_regfile();
   wire [`QPU_XLEN-1:0] alu_cwbck_o_data;
   wire [`QPU_RFIDX_REAL_WIDTH-1:0] alu_cwbck_o_rdidx;
 
+  wire alu_qcwbck_o_valid; // Handshake valid
+  wire  alu_qcwbck_o_ready; // Handshake ready
+  wire [`QPU_XLEN-1:0] alu_qcwbck_o_data;
+  wire [`QPU_RFIDX_REAL_WIDTH-1:0] alu_qcwbck_o_rdidx;
+
   wire alu_twbck_o_valid;
   wire [`QPU_TIME_WIDTH - 1 : 0] alu_twbck_o_data;
 
@@ -218,6 +223,7 @@ module tb_exu_regfile();
   wire  [`QPU_XLEN-1:0] crf_wbck_data;
   wire  [`QPU_RFIDX_REAL_WIDTH-1:0] crf_wbck_rdidx;
 
+
   wire trf_wbck_ena;
   wire [`QPU_TIME_WIDTH - 1 : 0] trf_wbck_data;
 
@@ -242,6 +248,9 @@ module tb_exu_regfile();
   wire [`QPU_XLEN-1:0] crf_rs1;
   wire [`QPU_XLEN-1:0] crf_rs2;
 
+  wire qcrf_wbck_ena;
+  wire  [`QPU_RFIDX_REAL_WIDTH-1:0] qcrf_wbck_rdidx;
+  wire  [`QPU_XLEN-1:0] qcrf_wbck_data;
 
 //time regfile          
   wire [`QPU_TIME_WIDTH - 1 : 0] trf_data;        //to alu
@@ -490,6 +499,11 @@ end
     .cwbck_o_ready        (alu_cwbck_o_ready ),
     .cwbck_o_data         (alu_cwbck_o_data  ),
     .cwbck_o_rdidx        (alu_cwbck_o_rdidx ),
+
+    .qcwbck_o_valid       (alu_qcwbck_o_valid ), 
+    .qcwbck_o_ready       (alu_qcwbck_o_ready ),
+    .qcwbck_o_data        (alu_qcwbck_o_data  ),
+    .qcwbck_o_rdidx       (alu_qcwbck_o_rdidx ),
   
     .twbck_o_valid        (alu_twbck_o_valid ), 
     .twbck_o_ready        (alu_twbck_o_ready ),
@@ -575,6 +589,12 @@ end
     .alu_cwbck_i_data    (alu_cwbck_o_data  ),
     .alu_cwbck_i_rdidx   (alu_cwbck_o_rdidx ),
 
+    .alu_qcwbck_i_valid  (alu_qcwbck_o_valid ),              
+    .alu_qcwbck_i_ready  (alu_qcwbck_o_ready ),
+    .alu_qcwbck_i_data   (alu_qcwbck_o_data  ),
+    .alu_qcwbck_i_rdidx  (alu_qcwbck_o_rdidx ),
+
+
     .alu_twbck_i_valid   (alu_twbck_o_valid ), 
     .alu_twbck_i_ready   (alu_twbck_o_ready ),
     .alu_twbck_i_data    (alu_twbck_o_data  ),
@@ -594,6 +614,10 @@ end
     .crf_wbck_o_data     (crf_wbck_data   ),
     .crf_wbck_o_rdidx    (crf_wbck_rdidx  ),
     
+    .qcrf_wbck_o_ena      (qcrf_wbck_ena    ),
+    .qcrf_wbck_o_data     (qcrf_wbck_data   ),
+    .qcrf_wbck_o_rdidx    (qcrf_wbck_rdidx  ),
+
     .trf_wbck_o_ena      (trf_wbck_ena    ),
     .trf_wbck_o_data     (trf_wbck_data   ),
     
@@ -622,6 +646,9 @@ end
     .cwbck_dest_idx         (crf_wbck_rdidx ),
     .cwbck_dest_data        (crf_wbck_data  ),
 
+    .qcwbck_dest_wen        (qcrf_wbck_ena   ),
+    .qcwbck_dest_idx        (qcrf_wbck_rdidx   ),
+    .qcwbck_dest_data       (qcrf_wbck_data   ),
 
     .twbck_dest_wen         (trf_wbck_ena   ),
     .twbck_dest_data        (trf_wbck_data  ),
